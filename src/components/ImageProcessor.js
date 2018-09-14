@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import {loadFrozenModel} from '@tensorflow/tfjs-converter';
 
-const MODEL_URL = window.location.origin + '/tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
-const WEIGHTS_URL = window.location.origin + '/tfjs-models/mobilenet_v2/weights_manifest.json';
-const LABELS_URL = window.location.origin + '/style_labels.txt';
+const MODEL_URL = 'tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
+const WEIGHTS_URL = 'tfjs-models/mobilenet_v2/weights_manifest.json';
+const LABELS_URL = 'style_labels.txt';
 
 const INPUT_NODE_NAME = 'Placeholder';
 const OUTPUT_NODE_NAME = 'final_result';
@@ -26,7 +26,6 @@ class ImageProcessor extends Component {
   handleProcess = async () => {
 
     const imgElement = document.getElementById('test')
-    console.log(imgElement)
     const tfImg = tf.fromPixels(imgElement)
     const smallImg = tf.image.resizeBilinear(tfImg, [224, 224])
     const preprocessedImg = tf.div(
