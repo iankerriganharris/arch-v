@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import {loadFrozenModel} from '@tensorflow/tfjs-converter';
-import MODEL_URL from '/tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
-import WEIGHTS_URL from '/tfjs-models/mobilenet_v2/weights_manifest.json';
-import LABELS_URL from '/style_labels.txt';
+import MODEL_URL from 'tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
+import WEIGHTS_URL from 'tfjs-models/mobilenet_v2/weights_manifest.json';
+import LABELS_URL from 'style_labels.txt';
 
 const INPUT_NODE_NAME = 'Placeholder';
 const OUTPUT_NODE_NAME = 'final_result';
