@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import {loadFrozenModel} from '@tensorflow/tfjs-converter';
 
-const MODEL_URL = '/tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
-const WEIGHTS_URL = '/tfjs-models/mobilenet_v2/weights_manifest.json';
-const LABELS_URL = 'style_labels.txt';
-const TEST_URL = 'intl-2029.jpg';
+const MODEL_URL = '%PUBLIC_URL%/tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
+const WEIGHTS_URL = '%PUBLIC_URL%/tfjs-models/mobilenet_v2/weights_manifest.json';
+const LABELS_URL = '%PUBLIC_URL%/style_labels.txt';
 const INPUT_NODE_NAME = 'Placeholder';
 const OUTPUT_NODE_NAME = 'final_result';
 const PREPROCESS_DIVISOR = tf.scalar(255 / 2);
