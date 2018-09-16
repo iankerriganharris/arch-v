@@ -12,7 +12,7 @@ class Classifier extends Component {
 
   componentDidMount() {
     this.setState({ analysing: true })
-    this.doAnalysis()
+    setTimeout(this.doAnalysis(), 500)
   }
 
   componentDidUpdate(prevProps) {
