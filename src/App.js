@@ -27,8 +27,12 @@ class App extends Component {
     this.setState({currentUpload: upload})
   }
 
+  imageReadyHandler = () => {
+    this.setState({imageElement: document.getElementById('inputImage')})
+  }
+
   render() {
-    const { imageElement, uploadDestination, numAnalyzed, currentUpload } = this.state
+    const { imageElement, numAnalyzed, currentUpload } = this.state
     return (
       <div className="App">
         <Container className='bg-light primary-container'>
@@ -41,7 +45,7 @@ class App extends Component {
           <Row>
             <Col>
               <div className='img-container'>
-                <img id='inputImage' src={currentUpload}/>
+                <img id='inputImage' src={currentUpload} onLoad={this.imageReadyHandler}/>
               </div>
               <UploadButton 
                 destinationHandler={this.uploadHandler}

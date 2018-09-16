@@ -48,7 +48,7 @@ class Classifier extends Component {
       }
     ) : null
     return (
-      <div className="center">
+      <div>
         { contextualized ? contextualized.map((tags) => tags) : null}
       </div>
     );
