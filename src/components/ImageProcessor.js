@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import {loadFrozenModel} from '@tensorflow/tfjs-converter';
 
-const MODEL_URL = 'tfjs-models/mobilenet_v2/tensorflowjs_model.pb';
-const WEIGHTS_URL = 'tfjs-models/mobilenet_v2/weights_manifest.json';
+const MODEL_URL = 'tfjs-models/mobilenet_v2_classification/tensorflowjs_model.pb';
+const WEIGHTS_URL = 'tfjs-models/mobilenet_v2_classification/weights_manifest.json';
 const LABELS_URL = 'style_labels.txt';
 
 const INPUT_NODE_NAME = 'Placeholder';
