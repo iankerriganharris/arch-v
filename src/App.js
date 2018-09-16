@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import {Container, Row, Col} from 'reactstrap';
-import Machine from './helpers/Machine'
-import Uploader from './components/Uploader';
+import Machine from './helpers/Machine';
 import Classifier from './components/Classifier';
+import Dropzone from './components/Dropzone';
+import UploadButton from './components/UploadButton';
 
 class App extends Component {
   constructor(props) {
@@ -22,19 +23,29 @@ class App extends Component {
     this.appMachine.loadLabels()
   }
 
-  uploadHandler = () => {
-    const upload = document.getElementById(this.state.uploadDestination)
-    this.setState({imageElement: upload, numAnalyzed: this.state.numAnalyzed + 1})
+  uploadHandler = (upload) => {
+    this.setState({currentUpload: upload})
   }
 
   render() {
-    const { imageElement, uploadDestination, numAnalyzed } = this.state
+    const { imageElement, uploadDestination, numAnalyzed, currentUpload } = this.state
     return (
       <div className="App">
         <Container className='bg-light primary-container'>
+          <Dropzone 
+            id='archDropzone' 
+            dragActiveClassName='striped'
+            destinationHandler={this.uploadHandler}
+            dragActiveText='Drop here'
+          >
           <Row>
             <Col>
-              <Uploader uploadDestination={uploadDestination} uploadHandler={this.uploadHandler} />
+              <div className='img-container'>
+                <img id='inputImage' src={currentUpload}/>
+              </div>
+              <UploadButton 
+                destinationHandler={this.uploadHandler}
+              />
             </Col>
             <Col>
             { imageElement ?
@@ -47,6 +58,11 @@ class App extends Component {
             }
             </Col>
           </Row>
+          <Row>
+            <Col>
+            </Col>
+          </Row>
+          </Dropzone>
         </Container>
       </div>
     );
