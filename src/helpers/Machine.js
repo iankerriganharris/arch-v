@@ -24,6 +24,10 @@ export default class Machine {
 
   }
 
+  getImageTensor = (imageElement) => {
+    return tf.fromPixels(imageElement)
+  }
+
   prepInput = (imageElement) => {
     const tfImage = tf.fromPixels(imageElement)
     const smallImage = tf.image.resizeBilinear(tfImage, [INPUT_WIDTH, INPUT_HEIGHT])
@@ -33,12 +37,14 @@ export default class Machine {
     const reshapedInput =
       preprocessedImage.reshape([-1, ...preprocessedImage.shape]);
     this.preppedInput = reshapedInput
+    return reshapedInput
   }
   
-  getPredictionValues = async () => {
+  getPredictionValues = (input) => {
+    console.log(this.model)
     // Get logits from prepped input
     const logits = this.model.execute(
-      {[INPUT_NODE_NAME]: this.preppedInput}, OUTPUT_NODE_NAME);
+      {[INPUT_NODE_NAME]: input}, OUTPUT_NODE_NAME);
     // Make predictions from logits
     const predictions = tf.tidy(() => {
       return tf.softmax(logits);

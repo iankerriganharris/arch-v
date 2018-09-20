@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {Progress} from 'reactstrap';
+import MachineWorker from '../helpers/Machine.worker.js';
+import Machine from '../helpers/Machine';
 
 const HIGH_CONFIDENCE_THRESHOLD = 0.075
 const MEDIUM_CONFIDENCE_THRESHOLD = 0.06
@@ -11,27 +14,39 @@ class Classifier extends Component {
   }
 
   componentDidMount() {
-    this.setState({ analysing: true })
-    setTimeout(this.doAnalysis(), 500)
+    this.callWorker(this.props.imageData)
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.numAnalyzed !== prevProps.numAnalyzed) {
-      this.doAnalysis()
+    if(this.props.imageData !== prevProps.imageData) {
+      this.callWorker(this.props.imageData)
     }
   }
 
-  doAnalysis = () => {
-    const { machine, imageElement } = this.props
-    machine.prepInput(imageElement)
-    machine.getPredictionValues()
-    machine.getTopKValues(5)
-    const labels = machine.labelValues()
-    this.setState({predictions: labels})
+  callWorker = (imageData) => {
+    const worker = new MachineWorker()
+    this.setState({ currentProgress: {value: 5}})
+    worker.onmessage = (message) => {
+      switch(message.data.text) {
+        case('Loaded'):
+          this.setState({ currentProgress: {value: 25}})
+          break;
+        case('Prepped'):
+          this.setState({ currentProgress: {value: 50}})
+          break;
+        case('Predicted'):
+          this.setState({ currentProgress: {value: 85}})
+          break;
+        case('Complete'):
+          this.setState({ currentProgress: {value: 100}, predictions: message.data.labels})
+          break;
+      }
+    }
+    worker.postMessage({message: 'Analyze', input: imageData})
   }
 
   render() {
-    const { predictions } = this.state
+    const { predictions, currentProgress } = this.state
     const contextualized = predictions ? predictions.map((p, i, arr) =>
       {
         let confidence_level
@@ -49,6 +64,7 @@ class Classifier extends Component {
     ) : null
     return (
       <div>
+        { currentProgress ? <Progress {...currentProgress} /> : null}
         { contextualized ? contextualized.map((tags) => tags) : null}
       </div>
     );
