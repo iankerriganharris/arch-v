@@ -69,9 +69,9 @@ class App extends Component {
           </Row>
           </Dropzone>
         </Container>
-        <footer className='footer text-muted'>
+        <footer className='footer'>
             <Container>
-              <Row>
+              <span>
                 Tensorflow model trained using the dataset from&nbsp;
                 <a 
                   target='_blank'
@@ -88,7 +88,7 @@ class App extends Component {
                 >
                 Zhe Xu
                 </a>.
-              </Row>
+              </span>
             </Container>
         </footer>
       </div>
