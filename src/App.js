@@ -4,6 +4,7 @@ import {Container, Row, Col} from 'reactstrap';
 import Classifier from './components/Classifier';
 import Dropzone from './components/Dropzone';
 import UploadButton from './components/UploadButton';
+import NavHeader from './components/NavHeader';
 
 class App extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class App extends Component {
     const { currentUpload, imageData } = this.state
     return (
       <div className="App">
+        <NavHeader/>
         <Container className='bg-light primary-container'>
           <Dropzone 
             id='archDropzone' 
