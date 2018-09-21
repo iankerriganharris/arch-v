@@ -69,6 +69,28 @@ class App extends Component {
           </Row>
           </Dropzone>
         </Container>
+        <footer className='footer text-muted'>
+            <Container>
+              <Row>
+                Tensorflow model trained using the dataset from&nbsp;
+                <a 
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  href='https://link.springer.com/chapter/10.1007/978-3-319-10590-1_39'
+                >
+                "Architectural Style Classification using Multinomial Latent Logistic Regression" (ECCV2014)
+                </a>.&nbsp;
+                For more information about the dataset, contact&nbsp;
+                <a
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  href='https://sites.google.com/site/zhexuutssjtu/home'
+                >
+                Zhe Xu
+                </a>.
+              </Row>
+            </Container>
+        </footer>
       </div>
     );
   }
