@@ -45,7 +45,7 @@ class App extends Component {
           <Row>
             <Col>
               <div className='img-container'>
-                <img id='inputImage' src={currentUpload} onLoad={this.imageReadyHandler}/>
+                <img id='inputImage' alt='' src={currentUpload} onLoad={this.imageReadyHandler}/>
               </div>
               <UploadButton 
                 destinationHandler={this.uploadHandler}

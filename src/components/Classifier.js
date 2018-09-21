@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Progress} from 'reactstrap';
+import {Progress, Fade} from 'reactstrap';
 import MachineWorker from '../helpers/Machine.worker.js';
 import Machine from '../helpers/Machine';
 
@@ -25,20 +25,26 @@ class Classifier extends Component {
 
   callWorker = (imageData) => {
     const worker = new MachineWorker()
-    this.setState({ currentProgress: {value: 5}})
+    this.setState({ currentProgress: {animated: true, value: 5}})
     worker.onmessage = (message) => {
       switch(message.data.text) {
         case('Loaded'):
-          this.setState({ currentProgress: {value: 25}})
+          this.setState({ currentProgress: {...this.state.currentProgress, value: 25}})
           break;
         case('Prepped'):
-          this.setState({ currentProgress: {value: 50}})
+          this.setState({ currentProgress: {...this.state.currentProgress, value: 60}})
           break;
         case('Predicted'):
-          this.setState({ currentProgress: {value: 85}})
+          this.setState({ currentProgress: {...this.state.currentProgress, value: 85}})
           break;
         case('Complete'):
-          this.setState({ currentProgress: {value: 100}, predictions: message.data.labels})
+          this.setState({
+            currentProgress: {...this.state.currentProgress, value: 100}
+          }, () => setTimeout(() => this.setState({
+              currentProgress: null,  
+              predictions: message.data.labels
+            }), 500)
+          )
           break;
       }
     }
@@ -47,25 +53,44 @@ class Classifier extends Component {
 
   render() {
     const { predictions, currentProgress } = this.state
+    const haveProgress = currentProgress ? true : false;
     const contextualized = predictions ? predictions.map((p, i, arr) =>
       {
         let confidence_level
         if (p.value > HIGH_CONFIDENCE_THRESHOLD) {
-          confidence_level = 'text-success'
+          confidence_level = 'success'
         } else if (p.value > MEDIUM_CONFIDENCE_THRESHOLD) {
-          confidence_level = 'text-info'
+          confidence_level = 'info'
         } else if (p.value > LOW_CONFIDENCE_THRESHOLD) {
-          confidence_level = 'text-warning'
+          confidence_level = 'warning'
         } else {
-          confidence_level = 'text-danger'
+          confidence_level = 'danger'
         }
-        return <p className={confidence_level} key={i}>{p.label}</p>
+        return (
+          <div className={`mb-3`} key={i}>
+            <p className={`text-${confidence_level} w-50 pr-3 d-inline-block text-right`}>
+              {p.label}
+            </p>
+            <div className={`w-50 d-inline-block`}>
+              <Progress color={confidence_level} value={p.value * 1000}></Progress>
+            </div>
+          </div>
+        )
       }
     ) : null
+    const haveTags = contextualized ? true : false;
     return (
       <div>
-        { currentProgress ? <Progress {...currentProgress} /> : null}
-        { contextualized ? contextualized.map((tags) => tags) : null}
+        { currentProgress ? 
+          <Fade in={haveProgress}>
+            <Progress {...currentProgress} />
+          </Fade> 
+          : null}
+        { contextualized ? 
+          <Fade in={haveTags && !haveProgress}>
+            { contextualized.map((tags) => tags) }
+          </Fade>
+          : null}
       </div>
     );
   }

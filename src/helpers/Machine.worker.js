@@ -12,7 +12,6 @@ const WEIGHTS_URL = 'tfjs-models/mobilenet_v2_classification/weights_manifest.js
 const LABELS_URL = 'style_labels.txt';
 
 onmessage = async (e) => {
-  console.log('Message received from main script', e.data);
   switch(e.data.message) {
     case('Analyze'):
       const img = e.data.input;
