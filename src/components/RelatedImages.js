@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Fade } from 'reactstrap';
 
 class RelatedImages extends Component {
   constructor(props) {
@@ -11,33 +11,42 @@ class RelatedImages extends Component {
   }
 
   componentDidMount = () => {
-    this.getImageNames()
+    this.getFileNames(this.props.activeLabel)
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { activeLabel } = this.props;
+    if(prevProps.activeLabel !== activeLabel) {
+      this.setState({...this.state, fileUrls: []}, () => this.getFileNames(activeLabel))
+    }
+
     const { fileNames } = this.state;
     if(prevState.fileNames !== fileNames && Array.isArray(fileNames) && fileNames.length) {
-      fileNames.forEach((v) => this.getImageUrls(v))
+        fileNames.forEach((v) => this.getImageUrls(v))
     }
   }
 
-  getImageNames = async () => {
-    const response = await fetch(
-      'https://en.wikipedia.org/w/api.php?action=query&titles=Art_Deco&prop=images&format=json&origin=*'
-      )
-    const data = await response.json()
-    const pageId = Object.keys(data.query.pages)[0]
-    const fileNames = data.query.pages[pageId].images.slice(0,5).map((v, i) => v.title)
-    this.setState({fileNames: fileNames})
+  getFileNames = async (activeLabel) => {
+    const encodedSearchTerm = encodeURIComponent(activeLabel)
+    try {
+      const response = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=query&titles=${encodedSearchTerm}&prop=images&format=json&origin=*`
+        )
+      const data = await response.json()
+      const pageId = Object.keys(data.query.pages)[0]
+      const fileNames = data.query.pages[pageId].images.slice(0,3).map((v, i) => v.title)
+      this.setState({fileNames: fileNames})
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   getImageUrls = async (fileName) => {
-    const encodedFileName = encodeURIComponent(fileName);
+    const encodedSearchTerm = encodeURIComponent(fileName);
     const response = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodedFileName}&prop=imageinfo&iiprop=url&iiurlwidth=220&format=json&origin=*`
+      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodedSearchTerm}&prop=imageinfo&iiprop=url&iiurlwidth=220&format=json&origin=*`
       )
     const data = await response.json()
-    console.log(data)
     const pageId = Object.keys(data.query.pages)[0]
     const url = data.query.pages[pageId].imageinfo[0].thumburl
     this.setState({...this.state, fileUrls: [...this.state.fileUrls, url]})
@@ -45,10 +54,17 @@ class RelatedImages extends Component {
 
   render() {
     const { fileUrls } = this.state
+    const haveAllUrls = fileUrls ? true : false;
     return(
-      <Row>
-        {fileUrls.map((url, i) => <Col><img  src={url} alt='' /></Col>)}
+      <Fade in={haveAllUrls}>
+      <Row className='img-row'>
+        <Col>
+          <ul>
+          {fileUrls.map((url, i) => <li><img className='related-img' src={url} alt='' /></li>)}
+          </ul>
+        </Col>
       </Row>
+      </Fade>
     )
   }
 }

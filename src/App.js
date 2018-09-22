@@ -11,9 +11,7 @@ import RelatedImages from './components/RelatedImages';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      imageElement: null
-    };
+    this.state = {}
   }
 
   uploadHandler = (upload) => {
@@ -22,7 +20,6 @@ class App extends Component {
 
   imageReadyHandler = () => {
     const imgEl = document.getElementById('inputImage')
-    this.setState({imageElement: imgEl})
     const c = document.getElementById('primaryCanvas');
     const ctx = c.getContext('2d');
     const nw = imgEl.naturalWidth;
@@ -34,8 +31,12 @@ class App extends Component {
     this.setState({imageData: imgData})
   }
 
+  setActiveLabel = (label) => {
+    this.setState({...this.state, activeLabel: label})
+  }
+
   render() {
-    const { currentUpload, imageData } = this.state
+    const { currentUpload, imageData, activeLabel } = this.state
     return (
       <div className="App">
         <NavHeader/>
@@ -45,11 +46,16 @@ class App extends Component {
             dragActiveClassName='striped'
             destinationHandler={this.uploadHandler}
             dragActiveText='Drop here'
-          >
+            >
           <Row>
             <Col>
               <div className='img-container'>
-                <img id='inputImage' alt='' src={currentUpload} onLoad={this.imageReadyHandler}/>
+                <img 
+                  id='inputImage' 
+                  alt='' 
+                  src={currentUpload} 
+                  onLoad={this.imageReadyHandler}
+                  />
               </div>
               <UploadButton 
                 destinationHandler={this.uploadHandler}
@@ -59,18 +65,20 @@ class App extends Component {
             { imageData ?
               <Classifier
                 imageData={imageData}
+                setActiveLabel={this.setActiveLabel}
               />
             : null
             }
             </Col>
           </Row>
           <Row>
-            <RelatedImages />
-          </Row>
-          <Row>
               <canvas className='d-none' id='primaryCanvas'></canvas>
           </Row>
           </Dropzone>
+        { activeLabel ? 
+          <RelatedImages activeLabel={activeLabel}/>
+          : null
+        }
         </Container>
         <Footer />
       </div>

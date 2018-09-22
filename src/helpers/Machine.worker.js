@@ -14,6 +14,10 @@ const LABELS_URL = 'style_labels.txt';
 onmessage = async (e) => {
   switch(e.data.message) {
     case('Analyze'):
+      let predictionList = [];
+      setTimeout(() => {
+        if(!predictionList.length) postMessage({text: 'Error'})
+      }, 10000)
       const img = e.data.input;
       const model = await loadFrozenModel(MODEL_URL, WEIGHTS_URL)
       const labelsFile = await fetch(LABELS_URL)
@@ -36,7 +40,6 @@ onmessage = async (e) => {
       });
       const values = predictions.dataSync();
       predictions.dispose();
-      let predictionList = [];
       for (let i = 0; i < values.length; i++) {
         predictionList.push({value: values[i], index: i});
       }

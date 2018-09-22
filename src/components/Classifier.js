@@ -27,6 +27,13 @@ class Classifier extends Component {
     this.setState({ currentProgress: {animated: true, value: 5}, error: null})
     worker.onmessage = (message) => {
       switch(message.data.text) {
+        case('Error'):
+          worker.terminate()
+          this.setState({
+            currentProgress: null,
+            error: true
+          })
+          break;
         case('Loaded'):
           this.setState({ currentProgress: {...this.state.currentProgress, value: 25}})
           break;
@@ -42,21 +49,14 @@ class Classifier extends Component {
           }, () => setTimeout(() => this.setState({
               currentProgress: null,  
               predictions: message.data.labels
-            }), 500)
+            }, () => this.props.setActiveLabel(this.state.predictions[0].label)
+            ), 500)
           )
+          
           break;
       }
     }
     worker.postMessage({message: 'Analyze', input: imageData})
-    setTimeout(() => {
-      if(this.state.currentProgress !== null) {
-        worker.terminate()
-        this.setState({
-          currentProgress: null,
-          error: true
-        })
-      }
-    }, 10000)
   }
 
   render() {

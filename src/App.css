@@ -91,6 +91,21 @@ body {
   to { transform: rotate(360deg); }
 }
 
+.img-row li {
+  width: 33.3%;
+  float: left;
+  list-style: none;
+}
+
+.related-img {
+  border: 0 none;
+  display: inline-block;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+  padding: 5%;
+}
+
 .footer {
   font-size: 8pt;
   position: fixed;
@@ -100,4 +115,20 @@ body {
   line-height: 20px;
   color: #6a737c;
   background-color: #242729;
+}
+
+.footer a {
+  color: #848d95;
+}
+
+.footer a:hover {
+  color: #bbc0c4;
+  text-decoration: none;
+}
+
+.short-footer-text { display: none; }
+
+@media (max-width: 480px) {
+  .short-footer-text { display: inline-block; }
+  .full-footer-text { display: none; }
 }
