@@ -48,7 +48,7 @@ class App extends Component {
             dragActiveText='Drop here'
             >
           <Row>
-            <Col>
+            <Col sm={6} className='pb-3 pb-sm-0'>
               <div className='img-container'>
                 <img 
                   id='inputImage' 
@@ -61,7 +61,7 @@ class App extends Component {
                 destinationHandler={this.uploadHandler}
               />
             </Col>
-            <Col>
+            <Col sm={6}>
             { imageData ?
               <Classifier
                 imageData={imageData}

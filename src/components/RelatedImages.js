@@ -34,7 +34,13 @@ class RelatedImages extends Component {
         )
       const data = await response.json()
       const pageId = Object.keys(data.query.pages)[0]
-      const fileNames = data.query.pages[pageId].images.slice(0,3).map((v, i) => v.title)
+      // const fileNames = data.query.pages[pageId].images.slice(0,3).map((v, i) => v.title)
+      const numFileNames = 3;
+      const fileNames = data.query.pages[pageId].images
+        .map(x => ({ x, r: Math.random() }))
+        .sort((a, b) => a.r - b.r)
+        .map(a => a.x.title)
+        .slice(0, numFileNames);
       this.setState({fileNames: fileNames})
     } catch(error) {
       console.log(error)
@@ -60,7 +66,9 @@ class RelatedImages extends Component {
       <Row className='img-row'>
         <Col>
           <ul>
-          {fileUrls.map((url, i) => <li key={i}><img className='related-img' src={url} alt='' /></li>)}
+          {fileUrls.map((url, i) => 
+            <li key={i}><img className='related-img' src={url} alt='' /></li>
+            )}
           </ul>
         </Col>
       </Row>
