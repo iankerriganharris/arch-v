@@ -18,14 +18,15 @@ class Dropzone extends Component {
 
   handleDropFile = (e, destinationHandler) => {
     e.preventDefault();
+    this.setState({dragActive: false})
     if(e.dataTransfer.files && e.dataTransfer.files[0]) {
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
-        this.setState({dragActive: false}, () => {
-          destinationHandler(readerEvent.target.result)
-        })
+        destinationHandler(readerEvent.target.result)
       }
       reader.readAsDataURL(e.dataTransfer.files[0])
+    } else if(e.dataTransfer.getData('URL')) {
+      destinationHandler(e.dataTransfer.getData('URL'))
     }
   }
 
