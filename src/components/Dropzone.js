@@ -22,7 +22,7 @@ class Dropzone extends Component {
       const reader = new FileReader();
       reader.onload = (readerEvent) => {
         this.setState({dragActive: false}, () => {
-          destinationHandler ? destinationHandler(readerEvent.target.result) : null
+          destinationHandler(readerEvent.target.result)
         })
       }
       reader.readAsDataURL(e.dataTransfer.files[0])

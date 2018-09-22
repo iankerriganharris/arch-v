@@ -18,6 +18,7 @@ class Classifier extends Component {
 
   componentDidUpdate(prevProps) {
     if(this.props.imageData !== prevProps.imageData) {
+      this.props.setActiveLabel(null)
       this.callWorker(this.props.imageData)
     }
   }
@@ -28,7 +29,7 @@ class Classifier extends Component {
     worker.onmessage = (message) => {
       switch(message.data.text) {
         case('Error'):
-          worker.terminate()
+          worker.terminate();
           this.setState({
             currentProgress: null,
             error: true
@@ -52,11 +53,25 @@ class Classifier extends Component {
             }, () => this.props.setActiveLabel(this.state.predictions[0].label)
             ), 500)
           )
-          
+          break;
+        default:
+          worker.terminate();
+          this.setState({
+            currentProgress: null,
+            error: true
+          })
           break;
       }
     }
     worker.postMessage({message: 'Analyze', input: imageData})
+  }
+
+  handleResultClick = (e, label) => {
+    const selectedEl = document.getElementById(e.currentTarget.id);
+    const activeResult = document.getElementsByClassName('active-result')[0];
+    activeResult.classList.remove('active-result');
+    selectedEl.classList.add('active-result');
+    this.props.setActiveLabel(label)
   }
 
   render() {
@@ -75,12 +90,19 @@ class Classifier extends Component {
           confidence_level = 'danger'
         }
         return (
-          <div className={`mb-3`} key={i}>
-            <p className={`text-${confidence_level} w-50 pr-3 d-inline-block text-right`}>
-              {p.label}
-            </p>
-            <div className={`w-50 d-inline-block`}>
-              <Progress color={confidence_level} value={p.value * 1000}></Progress>
+          <div
+            onClick={(e) => this.handleResultClick(e, p.label)}
+            className={`result mb-3 ${i === 0 ? 'active-result' : '' }`} 
+            key={i}
+            id={`result${i}`}
+            >
+            <div className='p-3'>
+              <div className={`text-${confidence_level} w-50 pr-3 d-inline-block text-right`}>
+                {p.label}
+              </div>
+              <div className={`w-50 pr-3 d-inline-block`}>
+                <Progress color={confidence_level} value={p.value * 1000}></Progress>
+              </div>
             </div>
           </div>
         )

@@ -60,7 +60,7 @@ class RelatedImages extends Component {
       <Row className='img-row'>
         <Col>
           <ul>
-          {fileUrls.map((url, i) => <li><img className='related-img' src={url} alt='' /></li>)}
+          {fileUrls.map((url, i) => <li key={i}><img className='related-img' src={url} alt='' /></li>)}
           </ul>
         </Col>
       </Row>

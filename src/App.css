@@ -103,7 +103,8 @@ body {
   height: auto;
   max-width: 100%;
   vertical-align: middle;
-  padding: 5%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .footer {
@@ -131,4 +132,14 @@ body {
 @media (max-width: 480px) {
   .short-footer-text { display: inline-block; }
   .full-footer-text { display: none; }
+}
+
+.result:hover {
+  cursor: pointer;
+}
+
+.active-result {
+  -webkit-box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  border-radius: .25rem!important;
 }

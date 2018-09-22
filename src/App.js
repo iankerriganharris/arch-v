@@ -40,7 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         <NavHeader/>
-        <Container className='bg-light primary-container'>
+        <Container className='primary-container'>
           <Dropzone 
             id='archDropzone' 
             dragActiveClassName='striped'
@@ -71,14 +71,15 @@ class App extends Component {
             }
             </Col>
           </Row>
-          <Row>
-              <canvas className='d-none' id='primaryCanvas'></canvas>
-          </Row>
           </Dropzone>
-        { activeLabel ? 
+        { activeLabel ? <hr/> : null }
+        { activeLabel ?
           <RelatedImages activeLabel={activeLabel}/>
           : null
         }
+        <Row>
+            <canvas className='d-none' id='primaryCanvas'></canvas>
+        </Row>
         </Container>
         <Footer />
       </div>
