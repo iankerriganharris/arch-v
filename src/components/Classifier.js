@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {Progress, Fade} from 'reactstrap';
+import {Progress, Fade, Alert} from 'reactstrap';
 import MachineWorker from '../helpers/Machine.worker.js';
-import Machine from '../helpers/Machine';
 
 const HIGH_CONFIDENCE_THRESHOLD = 0.075
 const MEDIUM_CONFIDENCE_THRESHOLD = 0.06
@@ -25,7 +24,7 @@ class Classifier extends Component {
 
   callWorker = (imageData) => {
     const worker = new MachineWorker()
-    this.setState({ currentProgress: {animated: true, value: 5}})
+    this.setState({ currentProgress: {animated: true, value: 5}, error: null})
     worker.onmessage = (message) => {
       switch(message.data.text) {
         case('Loaded'):
@@ -49,10 +48,19 @@ class Classifier extends Component {
       }
     }
     worker.postMessage({message: 'Analyze', input: imageData})
+    setTimeout(() => {
+      if(this.state.currentProgress !== null) {
+        worker.terminate()
+        this.setState({
+          currentProgress: null,
+          error: true
+        })
+      }
+    }, 10000)
   }
 
   render() {
-    const { predictions, currentProgress } = this.state
+    const { predictions, currentProgress, error } = this.state
     const haveProgress = currentProgress ? true : false;
     const contextualized = predictions ? predictions.map((p, i, arr) =>
       {
@@ -85,12 +93,18 @@ class Classifier extends Component {
           <Fade in={haveProgress}>
             <Progress {...currentProgress} />
           </Fade> 
-          : null}
+          : null
+          }
         { contextualized ? 
           <Fade in={haveTags && !haveProgress}>
             { contextualized.map((tags) => tags) }
           </Fade>
-          : null}
+          : null
+          }
+        { error ?
+          <Alert color='danger'>arch-v couldn't make a prediction</Alert>
+          : null
+          }
       </div>
     );
   }

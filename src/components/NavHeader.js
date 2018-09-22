@@ -8,7 +8,7 @@ export default class NavHeader extends React.Component {
     return (
       <div>
         <Navbar light expand="md">
-          <NavbarBrand href="/">arch-v</NavbarBrand>
+          <NavbarBrand href="">arch-v</NavbarBrand>
         </Navbar>
       </div>
     );
