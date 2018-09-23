@@ -113,7 +113,7 @@ class Classifier extends Component {
       <div>
         { currentProgress ? 
           <Fade in={haveProgress}>
-            <Progress {...currentProgress} />
+            <Progress id='currentProgress' {...currentProgress} />
           </Fade> 
           : null
           }

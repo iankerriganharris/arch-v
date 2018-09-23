@@ -63,7 +63,7 @@ class RelatedImages extends Component {
     const haveAllUrls = fileUrls ? true : false;
     return(
       <Fade in={haveAllUrls}>
-      <Row className='img-row'>
+      <Row id='relatedImages' className='img-row'>
         <Col>
           <ul>
           {fileUrls.map((url, i) => 

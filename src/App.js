@@ -7,11 +7,21 @@ import UploadButton from './components/UploadButton';
 import NavHeader from './components/NavHeader';
 import Footer from './components/Footer';
 import RelatedImages from './components/RelatedImages';
+import Intro from './components/Intro';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {}
+  }
+
+  componentDidMount() {
+    const lastVisit = localStorage.getItem('lastVisit')
+    if(lastVisit === undefined ) {
+      this.setState({lastVisit: null})
+    } else {
+      this.setState({lastVisit: lastVisit})
+    }
   }
 
   uploadHandler = (upload) => {
@@ -35,14 +45,27 @@ class App extends Component {
     this.setState({...this.state, activeLabel: label})
   }
 
+  setVisit = () => {
+    const now = Date.now();
+    localStorage.setItem('lastVisit', now)
+    this.setState({...this.state, lastVisit: now})
+  }
+
   render() {
-    const { currentUpload, imageData, activeLabel } = this.state
+    const { currentUpload, imageData, activeLabel, lastVisit } = this.state
     return (
       <div className="App">
         <NavHeader/>
+        {lastVisit === null ? 
+        <Intro 
+          destinationHandler={this.uploadHandler}
+          setVisit={this.setVisit}
+          /> 
+        : null
+        }
         <Container className='primary-container'>
           <Dropzone 
-            id='archDropzone' 
+            id='archDropzone'
             dragActiveClassName='striped'
             destinationHandler={this.uploadHandler}
             dragActiveText='Drop here'

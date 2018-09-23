@@ -19,7 +19,7 @@ const handleInputFile = (e, destinationHandler) => {
 
 const UploadButton = (props) => {
   return(
-    <div>
+    <div id='uploadButtonContainer'>
       <input 
         type="file" 
         id='hiddenInput' 

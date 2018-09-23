@@ -6,7 +6,7 @@ import {
 export default class NavHeader extends React.Component {
   render() {
     return (
-      <div>
+      <div id='navHeader'>
         <Navbar light expand="md">
           <NavbarBrand href="">arch-v</NavbarBrand>
         </Navbar>
